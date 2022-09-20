@@ -32,7 +32,9 @@ class SFTPAccessor(Accessor):
         self._port = port
         self._sftp = None
         self._ssh = None
-
+        self._logger = logging.getLogger(
+            __name__ + '.' + self.__class__.__name__
+        )
         super(SFTPAccessor, self).__init__()
 
     def __deepcopy__(self, memo):
@@ -48,6 +50,7 @@ class SFTPAccessor(Accessor):
     def ssh(self):
         """Return SSH resource."""
         if self._ssh is None:
+            self._logger.debug("Initialising SSH Session")
             self._ssh = paramiko.SSHClient()
             self._ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             if not self._password:
@@ -68,6 +71,7 @@ class SFTPAccessor(Accessor):
     @property
     def sftp(self):
         """Return SFTP resource."""
+        self._logger.debug("Initialising SFTP Session")
         if self._sftp is None:
             self._sftp = self.ssh.open_sftp()
 
@@ -160,7 +164,7 @@ class SFTPAccessor(Accessor):
             if "w" not in mode and "a" not in mode:
                 raise AccessorResourceNotFoundError(resource_identifier)
 
-            # New file
+            self._logger.debug("Creating SFTP Resource {resource_identifier}")
             self.ssh.exec_command(f"touch {resource_identifier}")
             file_obj = self.sftp.open(resource_identifier, mode)
 
@@ -176,6 +180,7 @@ class SFTPAccessor(Accessor):
         *resourceIdentifier* does not exist.
 
         """
+        self._logger.debug("Removing SFTP Resource {resource_identifier}")
         if self.is_file(resource_identifier):
             self.sftp.remove(resource_identifier)
 
