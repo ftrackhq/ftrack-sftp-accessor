@@ -170,3 +170,4 @@ cython_debug/
 docs/_*
 docs/Makefile
 docs/make.bat
+.python-version
