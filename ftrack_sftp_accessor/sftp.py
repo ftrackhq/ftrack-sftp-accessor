@@ -2,15 +2,7 @@
 # :copyright: Copyright (c) 2014-2022 ftrack
 import os
 import logging
-
-SFTP_AVAILABLE = False
-
-try:
-    import paramiko
-
-    SFTP_AVAILABLE = True
-except ImportError:
-    pass
+import paramiko
 
 from ftrack_api.accessor.base import Accessor
 from ftrack_api.data import FileWrapper
@@ -34,12 +26,6 @@ class SFTPAccessor(Accessor):
         port=22,
         password=None
     ):
-        """Initialise location accessor."""
-        if not SFTP_AVAILABLE:
-            raise NotImplementedError(
-                "SFTPAccessor not available as failed to import sftp package. "
-                "Please install sftp if you want to use this accessor."
-            )
         self._host = host
         self._username = username
         self._password = password
