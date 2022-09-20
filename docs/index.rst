@@ -10,6 +10,7 @@ Welcome to ftrack-sftp-accessor's documentation!
    :maxdepth: 1
 
    installation
+   examples
    api_reference/index
 
 Indices and tables
