@@ -1,3 +1,5 @@
+# :coding: utf-8
+# :copyright: Copyright (c) 2014-2022 ftrack
 import ftrack_api.structure.id
 from sftp import SFTPAccessor
 import os
