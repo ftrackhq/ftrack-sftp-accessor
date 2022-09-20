@@ -19,22 +19,14 @@ from ftrack_api.exception import (
 class SFTPAccessor(Accessor):
     """Provide SFTP location access."""
 
-    def __init__(
-        self,
-        host,
-        username,
-        port=22,
-        password=None
-    ):
+    def __init__(self, host, username, port=22, password=None):
         self._host = host
         self._username = username
         self._password = password
         self._port = port
         self._sftp = None
         self._ssh = None
-        self._logger = logging.getLogger(
-            __name__ + '.' + self.__class__.__name__
-        )
+        self._logger = logging.getLogger(__name__ + "." + self.__class__.__name__)
         super(SFTPAccessor, self).__init__()
 
     def __deepcopy__(self, memo):
@@ -98,6 +90,9 @@ class SFTPAccessor(Accessor):
             self.sftp.stat(resource_identifier)
             return self.sftp.listdir(resource_identifier)
         except IOError:
+            self._logger.debug(
+                f"Returning an empty list as resource identifier {resource_identifier} doesn't exist"
+            )
             return []
 
     def exists(self, resource_identifier):
@@ -121,6 +116,9 @@ class SFTPAccessor(Accessor):
         try:
             file_object = self.sftp.stat(resource_identifier)
         except IOError:
+            self._logger.debug(
+                "Returning is not file as resource identifier doesn't exist"
+            )
             file_object = None
         except Exception as error:
             raise AccessorOperationFailedError(
@@ -161,10 +159,10 @@ class SFTPAccessor(Accessor):
         try:
             file_obj = self.sftp.open(resource_identifier, mode)
         except IOError:
+            self._logger.debug(f"Creating SFTP Resource {resource_identifier}")
             if "w" not in mode and "a" not in mode:
                 raise AccessorResourceNotFoundError(resource_identifier)
 
-            self._logger.debug("Creating SFTP Resource {resource_identifier}")
             self.ssh.exec_command(f"touch {resource_identifier}")
             file_obj = self.sftp.open(resource_identifier, mode)
 
@@ -180,7 +178,7 @@ class SFTPAccessor(Accessor):
         *resourceIdentifier* does not exist.
 
         """
-        self._logger.debug("Removing SFTP Resource {resource_identifier}")
+        self._logger.debug(f"Removing SFTP Resource {resource_identifier}")
         if self.is_file(resource_identifier):
             self.sftp.remove(resource_identifier)
 

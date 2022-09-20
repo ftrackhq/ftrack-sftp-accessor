@@ -12,10 +12,7 @@ hostname = os.getenv("FTRACK_SFTP_ACCESSOR_HOSTNAME", None)
 port = os.getenv("FTRACK_SFTP_ACCESSOR_PORT", 22)
 
 # Setup accessor
-location.accessor = SFTPAccessor(
-    hostname,
-    port=port
-)
+location.accessor = SFTPAccessor(hostname, port=port)
 location.structure = ftrack_api.structure.standard.StandardStructure()
 location.priority = 30
 

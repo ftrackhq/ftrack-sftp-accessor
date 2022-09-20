@@ -30,19 +30,12 @@ def configure_location(event):
     password = os.getenv("FTRACK_SFTP_ACCESSOR_PASSWORD", None)
 
     # Setup accessor to use bucket
-    location.accessor = SFTPAccessor(
-        hostname,
-        username,
-        port=port,
-        password=password
-    )
+    location.accessor = SFTPAccessor(hostname, username, port=port, password=password)
     location.structure = ftrack_api.structure.standard.StandardStructure()
     location.priority = 30
 
     # Setup any other locations you require
-    ftrack_location = session.query(
-        'Location where name is "ftrack.connect"'
-    ).one()
+    ftrack_location = session.query('Location where name is "ftrack.connect"').one()
     ftrack_location.structure = ftrack_api.structure.standard.StandardStructure()
     ftrack_location.accessor = ftrack_api.accessor.disk.DiskAccessor(
         prefix="/Users/ian/ftrack_storage"
