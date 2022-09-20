@@ -26,18 +26,6 @@ Running the example scripts from within your environment requires you to additio
 
     PYTHONPATH=./ftrack_sftp_accessor
 
-Several environment variables are used to configure the plugin::
-
-    FTRACK_SFTP_ACCESSOR_HOSTNAME=<your_sftp_host>
-    FTRACK_SFTP_ACCESSOR_PORT=22
-
-For an install managed entirely by local ssh keys, where you're able to authenticate successfully without specifying a username/password combination each time, this will be enough for the plugin to make transfers.
-
-Alternatively, you can specify a username and password like so::
-
-    FTRACK_SFTP_ACCESSOR_USERNAME=user
-    FTRACK_SFTP_ACCESSOR_PASSWORD=**********
-
 **********
 Usage
 **********
@@ -58,6 +46,32 @@ Setting up the accessor for the sftp location is done like so::
     )
     location.structure = ftrack_api.structure.standard.StandardStructure()
     location.priority = 30
+
+.. highlight:: bash
+
+Several environment variables are used to configure the plugin::
+
+    FTRACK_SFTP_ACCESSOR_HOSTNAME=<your_sftp_host>
+    FTRACK_SFTP_ACCESSOR_PORT=22
+
+For an install managed entirely by local ssh keys, where you're able to authenticate successfully without specifying a username/password combination each time, this will be enough for the plugin to make transfers.
+
+Alternatively, you can specify a username and password like so::
+
+    FTRACK_SFTP_ACCESSOR_USERNAME=user
+    FTRACK_SFTP_ACCESSOR_PASSWORD=**********
+
+.. highlight:: python
+
+And then in your plugin::
+
+    location = session.query('Location where name is "studio.sftp"').one()
+    hostname = os.getenv("FTRACK_SFTP_ACCESSOR_HOSTNAME", None)
+    port = os.getenv("FTRACK_SFTP_ACCESSOR_PORT", 22)
+    username = os.getenv("FTRACK_SFTP_ACCESSOR_USERNAME", None)
+    password = os.getenv("FTRACK_SFTP_ACCESSOR_PASSWORD", None)
+
+    location.accessor = SFTPAccessor(hostname, username, port=port, password=password)
 
 Uploading Components
 ====================
