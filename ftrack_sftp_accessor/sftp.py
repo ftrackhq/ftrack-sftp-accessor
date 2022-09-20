@@ -117,7 +117,7 @@ class SFTPAccessor(Accessor):
             file_object = self.sftp.stat(resource_identifier)
         except IOError:
             self._logger.debug(
-                "Returning is not file as resource identifier doesn't exist"
+                f"Returning is not file as resource identifier {resource_identifier} doesn't exist"
             )
             file_object = None
         except Exception as error:
