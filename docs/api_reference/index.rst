@@ -8,3 +8,4 @@ API reference
     
 .. autoclass:: ftrack_sftp_accessor.sftp.SFTPAccessor
    :members:
+   :special-members: __init__

@@ -1,5 +1,6 @@
 # :coding: utf-8
 # :copyright: Copyright (c) 2014-2022 ftrack
+
 import os
 import logging
 import paramiko
@@ -20,6 +21,7 @@ class SFTPAccessor(Accessor):
     """Provide SFTP location access."""
 
     def __init__(self, host, username, port=22, password=None):
+        """Initialise location accessor."""
         self._host = host
         self._username = username
         self._password = password
