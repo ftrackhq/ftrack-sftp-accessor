@@ -1,5 +1,6 @@
 # :coding: utf-8
 # :copyright: Copyright (c) 2014-2022 ftrack
+
 import ftrack_api
 import ftrack_api.entity.location
 import ftrack_api.accessor.disk
