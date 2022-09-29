@@ -21,7 +21,11 @@ class SFTPAccessor(Accessor):
     """Provide SFTP location access."""
 
     def __init__(self, host, username, port=22, password=None):
-        """Initialise location accessor."""
+        """Initialise location accessor.
+
+        Uses the server credentials specified by *host*, *password*, *port* and *password*
+        to create a sftp connection
+        """
         self._host = host
         self._username = username
         self._password = password
