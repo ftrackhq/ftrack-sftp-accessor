@@ -22,10 +22,6 @@ Configure a new location within ftrack with the name 'studio.sftp'. This will be
 
 Set all other ftrack environment variables for your ftrack instance.
 
-Running the example scripts from within your environment requires you to additionally set your sources root to the accessor directory::
-
-    PYTHONPATH=./ftrack_sftp_accessor
-
 **********
 Usage
 **********

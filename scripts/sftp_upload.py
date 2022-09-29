@@ -2,7 +2,7 @@
 # :copyright: Copyright (c) 2014-2022 ftrack
 
 import ftrack_api.structure.id
-from sftp import SFTPAccessor
+from ftrack_sftp_accessor.sftp import SFTPAccessor
 import os
 
 

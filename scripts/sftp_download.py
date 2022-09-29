@@ -5,7 +5,7 @@ import ftrack_api.structure.id
 import ftrack_api.accessor.disk
 import os
 
-from sftp import SFTPAccessor
+from ftrack_sftp_accessor.sftp import SFTPAccessor
 
 """
 Copies a component from a sftp location to a local location
