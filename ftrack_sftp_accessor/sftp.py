@@ -130,7 +130,7 @@ class SFTPAccessor(Accessor):
             raise AccessorOperationFailedError(
                 operation="is_file",
                 resource_identifier=resource_identifier,
-                details=error,
+                error=error,
             )
 
         return file_object is not None
