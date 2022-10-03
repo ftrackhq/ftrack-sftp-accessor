@@ -81,9 +81,9 @@ class SFTPAccessor(Accessor):
         Each entry in the returned list should be a valid resource identifier.
 
         Raise :py:class:`~ftrack.ftrackerror.AccessorResourceNotFoundError` if
-        *resourceIdentifier* does not exist or
+        *resource_identifier* does not exist or
         :py:class:`~ftrack.ftrackerror.AccessorResourceInvalidError` if
-        *resourceIdentifier* is not a container.
+        *resource_identifier* is not a container.
 
         """
         if not resource_identifier.endswith("/"):
@@ -102,7 +102,7 @@ class SFTPAccessor(Accessor):
             return []
 
     def exists(self, resource_identifier):
-        """Return if *resourceIdentifier* is valid and exists in location."""
+        """Return if *resource_identifier* is valid and exists in location."""
         # Root directory always exists
         if not resource_identifier:
             return True
@@ -129,7 +129,7 @@ class SFTPAccessor(Accessor):
         except Exception as error:
             raise AccessorOperationFailedError(
                 operation="is_file",
-                resourceIdentifier=resource_identifier,
+                resource_identifier=resource_identifier,
                 details=error,
             )
 
@@ -155,10 +155,10 @@ class SFTPAccessor(Accessor):
         raise AccessorUnsupportedOperationError("is_sequence")
 
     def open(self, resource_identifier, mode="rb"):
-        """Return :py:class:`~ftrack.Data` for *resourceIdentifier*."""
+        """Return :py:class:`~ftrack.Data` for *resource_identifier*."""
         if self.is_container(resource_identifier):
             raise AccessorResourceInvalidError(
-                resource_identifier,
+                resource_identifier=resource_identifier,
                 message="Cannot open a directory: {resource_identifier}",
             )
 
@@ -167,7 +167,9 @@ class SFTPAccessor(Accessor):
         except IOError:
             self._logger.debug(f"Creating SFTP Resource {resource_identifier}")
             if "w" not in mode and "a" not in mode:
-                raise AccessorResourceNotFoundError(resource_identifier)
+                raise AccessorResourceNotFoundError(
+                    resource_identifier=resource_identifier
+                )
 
             self.ssh.exec_command(f"touch {resource_identifier}")
             file_obj = self.sftp.open(resource_identifier, mode)
@@ -178,10 +180,10 @@ class SFTPAccessor(Accessor):
         return FileWrapper(file_obj)
 
     def remove(self, resource_identifier):
-        """Remove *resourceIdentifier*.
+        """Remove *resource_identifier*.
 
         Raise :py:class:`~ftrack.ftrackerror.AccessorResourceNotFoundError` if
-        *resourceIdentifier* does not exist.
+        *resource_identifier* does not exist.
 
         """
         self._logger.debug(f"Removing SFTP Resource {resource_identifier}")
@@ -191,24 +193,26 @@ class SFTPAccessor(Accessor):
         elif self.is_container(resource_identifier):
             contents = self.list(resource_identifier)
             if contents:
-                raise AccessorContainerNotEmptyError(resource_identifier)
+                raise AccessorContainerNotEmptyError(
+                    resource_identifier=resource_identifier
+                )
 
             self.sftp.remove(resource_identifier + "/")
 
         else:
-            raise AccessorResourceNotFoundError(resource_identifier)
+            raise AccessorResourceNotFoundError(resource_identifier=resource_identifier)
 
     def get_container(self, resource_identifier):
-        """Return resourceIdentifier of container for *resourceIdentifier*.
+        """Return resource_identifier of container for *resource_identifier*.
 
         Raise
         :py:class:`~ftrack.ftrackerror.AccessorParentResourceNotFoundError` if
-        container of *resourceIdentifier* could not be determined.
+        container of *resource_identifier* could not be determined.
 
         """
         if os.path.normpath(resource_identifier) in ("/", ""):
             raise AccessorParentResourceNotFoundError(
-                resource_identifier,
+                resource_identifier=resource_identifier,
                 message="Could not determine container for "
                 "{resource_identifier} as it is the root.",
             )
@@ -216,7 +220,7 @@ class SFTPAccessor(Accessor):
         return os.path.dirname(resource_identifier.rstrip("/"))
 
     def make_container(self, resource_identifier, recursive=True):
-        """Make a container at *resourceIdentifier*.
+        """Make a container at *resource_identifier*.
 
         If *recursive* is True, also make any intermediate containers.
 
@@ -231,10 +235,8 @@ class SFTPAccessor(Accessor):
         if self.exists(resource_identifier):
             if self.is_file(resource_identifier):
                 raise AccessorResourceInvalidError(
-                    resource_identifier,
-                    message=(
-                        "Resource already exists as a file: " "{resourceIdentifier}"
-                    ),
+                    resource_identifier=resource_identifier,
+                    message=("Resource {resource_identifier} already exists as a file"),
                 )
 
             else:
@@ -246,7 +248,7 @@ class SFTPAccessor(Accessor):
             if recursive:
                 self.make_container(parent, recursive=recursive)
             else:
-                raise AccessorParentResourceNotFoundError(parent)
+                raise AccessorParentResourceNotFoundError(resource_identifier=parent)
 
         self.sftp.mkdir(resource_identifier)
 
