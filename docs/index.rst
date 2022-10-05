@@ -12,6 +12,7 @@ Welcome to ftrack-sftp-accessor's documentation!
    installation
    examples
    api_reference/index
+   release_notes
 
 Indices and tables
 ==================

@@ -24,12 +24,11 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    "lowdown"
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-
-html_theme = "alabaster"
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "_template"]
 
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 
