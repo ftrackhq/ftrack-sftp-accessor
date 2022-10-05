@@ -24,7 +24,7 @@ class SFTPAccessor(Accessor):
         """Initialise location accessor.
 
         Uses the server credentials specified by *host*, *password*, *port* and *password*
-        to create a sftp connection. 
+        to create a sftp connection.
 
         If specified, *folder* indicates the subfolder where assets are stored
         """
@@ -41,11 +41,7 @@ class SFTPAccessor(Accessor):
     def __deepcopy__(self, memo):
         """Return a new SFTPAccessor instance"""
         return SFTPAccessor(
-            self._host,
-            self._username,
-            self._port,
-            self._password,
-            self._folder
+            self._host, self._username, self._port, self._password, self._folder
         )
 
     @property
@@ -76,7 +72,7 @@ class SFTPAccessor(Accessor):
         self._logger.debug("Initialising SFTP Session")
         if self._sftp is None:
             self._sftp = self.ssh.open_sftp()
-        
+
             if self._folder is not None:
                 self._sftp.chdir(self._folder)
 
@@ -263,5 +259,7 @@ class SFTPAccessor(Accessor):
         """Return url for *resource_identifier*."""
 
         if self._folder:
-            return f"sftp://{self._host}:{self._port}/{self._folder}/{resource_identifier}"
+            return (
+                f"sftp://{self._host}:{self._port}/{self._folder}/{resource_identifier}"
+            )
         return f"sftp://{self._host}:{self._port}/{resource_identifier}"
