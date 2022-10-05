@@ -57,6 +57,10 @@ Alternatively, you can specify a username and password like so::
     FTRACK_SFTP_ACCESSOR_USERNAME=user
     FTRACK_SFTP_ACCESSOR_PASSWORD=**********
 
+The default behaviour is to upload directly to the sftp users home folder. You can specify an optional subfolder which the accessor will use instead::
+
+    FTRACK_SFTP_ACCESSOR_FOLDER=ftrack
+
 .. highlight:: python
 
 And then in your plugin::
@@ -66,8 +70,15 @@ And then in your plugin::
     port = os.getenv("FTRACK_SFTP_ACCESSOR_PORT", 22)
     username = os.getenv("FTRACK_SFTP_ACCESSOR_USERNAME", None)
     password = os.getenv("FTRACK_SFTP_ACCESSOR_PASSWORD", None)
+    folder = os.getenv("FTRACK_SFTP_ACCESSOR_FOLDER", None)
 
-    location.accessor = SFTPAccessor(hostname, username, port=port, password=password)
+    location.accessor = SFTPAccessor(
+        hostname, 
+        username, 
+        port=port, 
+        password=password, 
+        folder=folder
+    )
 
 Uploading Components
 ====================
