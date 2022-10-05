@@ -20,16 +20,19 @@ from ftrack_api.exception import (
 class SFTPAccessor(Accessor):
     """Provide SFTP location access."""
 
-    def __init__(self, host, username, port=22, password=None):
+    def __init__(self, host, username, port=22, password=None, folder=None):
         """Initialise location accessor.
 
         Uses the server credentials specified by *host*, *password*, *port* and *password*
-        to create a sftp connection
+        to create a sftp connection. 
+
+        If specified, *folder* indicates the subfolder where assets are stored
         """
         self._host = host
         self._username = username
         self._password = password
         self._port = port
+        self._folder = folder
         self._sftp = None
         self._ssh = None
         self._logger = logging.getLogger(__name__ + "." + self.__class__.__name__)
@@ -42,6 +45,7 @@ class SFTPAccessor(Accessor):
             self._username,
             self._port,
             self._password,
+            self._folder
         )
 
     @property
@@ -72,6 +76,9 @@ class SFTPAccessor(Accessor):
         self._logger.debug("Initialising SFTP Session")
         if self._sftp is None:
             self._sftp = self.ssh.open_sftp()
+        
+            if self._folder is not None:
+                self._sftp.chdir(self._folder)
 
         return self._sftp
 
@@ -255,4 +262,6 @@ class SFTPAccessor(Accessor):
     def get_url(self, resource_identifier=None):
         """Return url for *resource_identifier*."""
 
+        if self._folder:
+            return f"sftp://{self._host}:{self._port}/{self._prefix}/{resource_identifier}"
         return f"sftp://{self._host}:{self._port}/{resource_identifier}"
