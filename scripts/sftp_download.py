@@ -16,8 +16,9 @@ sftp_location = session.ensure("Location", {"name": "studio.sftp"})
 hostname = os.getenv("FTRACK_SFTP_ACCESSOR_HOSTNAME", None)
 username = os.getenv("FTRACK_SFTP_ACCESSOR_USERNAME", None)
 port = os.getenv("FTRACK_SFTP_ACCESSOR_PORT", 22)
+folder = os.getenv("FTRACK_SFTP_ACCESSOR_FOLDER", "ftrack")
 
-sftp_location.accessor = SFTPAccessor(hostname, username, port=port)
+sftp_location.accessor = SFTPAccessor(hostname, username, port=port, folder=folder)
 sftp_location.structure = ftrack_api.structure.standard.StandardStructure()
 sftp_location.priority = 30
 
