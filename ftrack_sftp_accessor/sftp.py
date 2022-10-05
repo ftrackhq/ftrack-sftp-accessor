@@ -263,5 +263,5 @@ class SFTPAccessor(Accessor):
         """Return url for *resource_identifier*."""
 
         if self._folder:
-            return f"sftp://{self._host}:{self._port}/{self._prefix}/{resource_identifier}"
+            return f"sftp://{self._host}:{self._port}/{self._folder}/{resource_identifier}"
         return f"sftp://{self._host}:{self._port}/{resource_identifier}"
