@@ -10,6 +10,10 @@ Release Notes
 
 .. release:: Upcoming
 
+    .. change:: changed
+
+        Improve toml file with missing information.
+
     .. change:: added
 
         Initial code implementation.
