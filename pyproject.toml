@@ -1,17 +1,21 @@
 [tool.poetry]
 name = "ftrack-sftp-accessor"
-version = "0.5.0"
+version = "0.5.1"
 description = "A ftrack sftp accessor"
 authors = ["Ian Wootten <hi@niftydigits.com>"]
 maintainers = ["ftrack support <support@ftrack.com>"]
 license = "Apache 2"
+readme = 'README.md'
 repository = "https://github.com/ftrackhq/ftrack-sftp-accessor"
 documentation  = "https://ftrack-sftp-accessor.readthedocs.io/en/latest/"
+include = [
+    "LICENSE.txt",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.7.9,<3.10"
 ftrack-python-api = "^2.3.3"
-ftrack-action-handler = "^0.3.0"
+ftrack-action-handler = {version = "^0.3.0", optional = true}
 paramiko = "^2.11.0"
 
 [tool.poetry.group.dev.dependencies]
